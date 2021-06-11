@@ -5,5 +5,6 @@
 
 //Load Players
 player_loader = instance_create_depth(0, 0, 0, obj_PlayerLoader)
-//player_list = player_loader.player_list
+player_list = ds_list_create()
+ds_list_copy(player_list,player_loader.player_list)
 instance_destroy(player_loader)

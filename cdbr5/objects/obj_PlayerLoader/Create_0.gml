@@ -50,3 +50,5 @@ else
 		player_file_name = file_find_next()
 	}
 }
+
+instance_destroy(name_loader)
