@@ -8,8 +8,8 @@ while !file_text_eof(name_file) {
 	show_debug_message("Adding name: " + curr_name)
 }
 file_text_close(name_file)
-//show_debug_message("shuffling name list...")
-//ds_list_shuffle(name_list)
+show_debug_message("shuffling name list...")
+ds_list_shuffle(name_list)
 
 method(id, function get_name(i) {
 	return ds_list_find_value(name_list, i)

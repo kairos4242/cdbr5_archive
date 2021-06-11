@@ -37,4 +37,5 @@ if file_find_first(player_path + "/*.json", 0) == ""
 else
 {
 	show_debug_message("Now loading players")
+	
 }
