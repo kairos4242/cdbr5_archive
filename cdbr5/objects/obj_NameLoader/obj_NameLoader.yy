@@ -27,7 +27,7 @@
     "path": "folders/Objects/Controllers.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_PlayerLoader",
+  "name": "obj_NameLoader",
   "tags": [],
   "resourceType": "GMObject",
 }
