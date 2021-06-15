@@ -1,8 +1,5 @@
 {
-  "spriteId": {
-    "name": "spr_Player",
-    "path": "sprites/spr_Player/spr_Player.yy",
-  },
+  "spriteId": null,
   "solid": false,
   "visible": true,
   "spriteMaskId": null,
@@ -22,17 +19,16 @@
   "physicsShapePoints": [],
   "eventList": [
     {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-    {"isDnD":false,"eventNum":0,"eventType":8,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-    {"isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":10,"eventType":7,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
   ],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Game Objects",
-    "path": "folders/Objects/Game Objects.yy",
+    "name": "Command Pattern",
+    "path": "folders/Objects/Controllers/Command Pattern.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_Player",
+  "name": "obj_Command",
   "tags": [],
   "resourceType": "GMObject",
 }
