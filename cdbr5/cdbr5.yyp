@@ -2,7 +2,9 @@
   "resources": [
     {"id":{"name":"obj_NameLoader","path":"objects/obj_NameLoader/obj_NameLoader.yy",},"order":2,},
     {"id":{"name":"obj_PlayerLoader","path":"objects/obj_PlayerLoader/obj_PlayerLoader.yy",},"order":1,},
+    {"id":{"name":"obj_PlayerSelector","path":"objects/obj_PlayerSelector/obj_PlayerSelector.yy",},"order":3,},
     {"id":{"name":"obj_FightService","path":"objects/obj_FightService/obj_FightService.yy",},"order":0,},
+    {"id":{"name":"scr_utility","path":"scripts/scr_utility/scr_utility.yy",},"order":0,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":0,},
   ],
   "Options": [
