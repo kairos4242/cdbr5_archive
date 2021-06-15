@@ -12,5 +12,5 @@ else
 
 method(target, function receiver_move(target, x_change, y_change) {
 	target.x += x_change
-	target_y += y_change
+	target.y += y_change
 })

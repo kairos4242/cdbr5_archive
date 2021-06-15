@@ -29,6 +29,7 @@ if file_find_first(player_path + "/*.json", 0) == ""
 		new_player = {
 			hp: irandom(50) + 50,
 			name: name_loader.get_name(i)
+			move_speed: 10
 		}
 		player_file = file_text_open_write(player_path + "/Player" + string(i) + ".json")
 		file_text_write_string(player_file, json_stringify(new_player))
