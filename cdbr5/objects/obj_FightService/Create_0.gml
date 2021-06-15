@@ -15,9 +15,10 @@ ds_list_shuffle(player_list)
 
 player_selector = instance_create_depth(0, 0, 0, obj_PlayerSelector)
 player_selector.create(player_list)//workaround because constructors only for objects atm
+player_1_struct = player_selector.get_player()
+player_2_struct = player_selector.get_player()
 
-for (i = 0; i < 20; i++)
-{
-	//for testing purposes
-	show_debug_message("Player selected: " + string(player_selector.get_player()))
-}
+player_1 = instance_create_depth((room_width / 2) - 150, room_height / 2, 0, obj_Player)
+player_2 = instance_create_depth((room_width / 2) + 150, room_height / 2, 0, obj_Player)
+player_1.create(player_1_struct)
+player_2.create(player_2_struct)
