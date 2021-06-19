@@ -28,4 +28,5 @@ def send_and_receive():
 def test_timing():
     time_val = timeit.timeit("send_and_receive()", "from __main__ import send_and_receive; import random", number=1000)
     print("Time: " + str(time_val) + " seconds")
+
 s.close()

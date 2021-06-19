@@ -16,6 +16,12 @@ ds_list_shuffle(player_list)
 player_selector = instance_create_depth(0, 0, 0, obj_PlayerSelector)
 player_selector.create(player_list)//workaround because constructors only for objects atm
 
+//Create Environment
+//Just randomly placing rewards right now to test with python
+for (i = 0; i < 10; i++) {
+	instance_create_layer(irandom(room_width), irandom(room_height), "Instances", obj_SimpleReward)
+}
+
 
 method(id, function start_fight() {
 	player_1_struct = player_selector.get_player()
