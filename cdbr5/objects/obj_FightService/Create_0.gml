@@ -34,3 +34,5 @@ method(id, function end_fight() {
 })
 
 start_fight()
+
+server = instance_create_depth(0, 0, 0, obj_Server)
