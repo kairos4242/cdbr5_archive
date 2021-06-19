@@ -1,9 +1,6 @@
-import socket
-import struct
-import time
-import timeit
-import random
-
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 
 import abc
 import tensorflow as tf
@@ -18,38 +15,14 @@ from tf_agents.environments import wrappers
 from tf_agents.environments import suite_gym
 from tf_agents.trajectories import time_step as ts
 
-TCP_IP = '127.0.0.1'
-TCP_PORT = 8008
+tf.compat.v1.enable_v2_behavior()
 
-buffer_u16 = "H"
-buffer_u8 = "b"
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((TCP_IP, TCP_PORT))
-time.sleep(.1)
-
-def send_and_receive():
-    message = 50
-    data = random.randint(1, 128)
-    buffer_type = buffer_u8+buffer_u16
-    buffer = struct.pack('<'+buffer_type,*[message,data])
-
-    s.send(buffer)
-    #time.sleep(.1)
-    data = s.recv(1024)
-    #print('Received', repr(data)[50:])
-
-def test_timing():
-    time_val = timeit.timeit("send_and_receive()", "from __main__ import send_and_receive; import random", number=1000)
-    print("Time: " + str(time_val) + " seconds")
-
-s.close()
-
-class CDBREnv(py_environment.PyEnvironment):
+class CardGameEnv(py_environment.PyEnvironment):
 
   def __init__(self):
     self._action_spec = array_spec.BoundedArraySpec(
-        shape=(), dtype=np.int32, minimum=0, maximum=3, name='action')
+        shape=(), dtype=np.int32, minimum=0, maximum=1, name='action')
     self._observation_spec = array_spec.BoundedArraySpec(
         shape=(1,), dtype=np.int32, minimum=0, name='observation')
     self._state = 0
@@ -74,20 +47,13 @@ class CDBREnv(py_environment.PyEnvironment):
       return self.reset()
 
     # Make sure episodes don't go on forever.
-    if action == 3:
-        #move left
-        pass
-    if action== 2:
-        #move down
-        pass
     if action == 1:
-      #move right
-      pass
+      self._episode_ended = True
     elif action == 0:
       new_card = np.random.randint(1, 11)
       self._state += new_card
     else:
-      raise ValueError('`action` should be 0, 1, 2 or 3.')
+      raise ValueError('`action` should be 0 or 1.')
 
     if self._episode_ended or self._state >= 21:
       reward = self._state - 21 if self._state <= 21 else -21
