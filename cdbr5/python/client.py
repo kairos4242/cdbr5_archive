@@ -18,6 +18,8 @@ from tf_agents.environments import wrappers
 from tf_agents.environments import suite_gym
 from tf_agents.trajectories import time_step as ts
 
+#sending a -1 is sending a reset, sending a -2 is sending just a request for information with no action taken
+
 TCP_IP = '127.0.0.1'
 TCP_PORT = 8008
 
@@ -28,22 +30,32 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((TCP_IP, TCP_PORT))
 time.sleep(.1)
 
-def send_and_receive():
+def send_and_receive(int_to_send = random.randint(1, 128)):
     message = 50
-    data = random.randint(1, 128)
+    data = int_to_send
     buffer_type = buffer_u8+buffer_u16
     buffer = struct.pack('<'+buffer_type,*[message,data])
 
     s.send(buffer)
     #time.sleep(.1)
     data = s.recv(1024)
-    #print('Received', repr(data)[50:])
+    print('Received', repr(data)[50:])
+    print('Sanitized received: ', parse_buffer(repr(data)[50:]))
+
+def send_reset():
+  send_and_receive(-1)
 
 def test_timing():
     time_val = timeit.timeit("send_and_receive()", "from __main__ import send_and_receive; import random", number=1000)
     print("Time: " + str(time_val) + " seconds")
 
-s.close()
+def parse_buffer(buffer_to_parse):
+  #handles parsing the data that game maker sends back, returns an array of the game state
+  chopped_buffer = buffer_to_parse.partition("\\")[0]
+  arrayed_buffer = chopped_buffer.split(",")
+  return [int(i) for i in arrayed_buffer]
+
+#s.close()
 
 class CDBREnv(py_environment.PyEnvironment):
 
@@ -51,8 +63,8 @@ class CDBREnv(py_environment.PyEnvironment):
     self._action_spec = array_spec.BoundedArraySpec(
         shape=(), dtype=np.int32, minimum=0, maximum=3, name='action')
     self._observation_spec = array_spec.BoundedArraySpec(
-        shape=(1,), dtype=np.int32, minimum=0, name='observation')
-    self._state = 0
+        shape=(2,), dtype=np.int32, minimum=0, name='observation')
+    self._state = send_and_receive(-2)
     self._episode_ended = False
 
   def action_spec(self):
@@ -76,20 +88,20 @@ class CDBREnv(py_environment.PyEnvironment):
     # Make sure episodes don't go on forever.
     if action == 3:
         #move left
-        pass
+        self._state = send_and_receive(3)
     if action== 2:
         #move down
-        pass
+        self._state = send_and_receive(2)
     if action == 1:
       #move right
-      pass
+      self._state = send_and_receive(1)
     elif action == 0:
-      new_card = np.random.randint(1, 11)
-      self._state += new_card
+      #move up
+      self._state = send_and_receive(0)
     else:
       raise ValueError('`action` should be 0, 1, 2 or 3.')
 
-    if self._episode_ended or self._state >= 21:
+    if self._episode_ended or (self._state == [0, 0]):
       reward = self._state - 21 if self._state <= 21 else -21
       return ts.termination(np.array([self._state], dtype=np.int32), reward)
     else:

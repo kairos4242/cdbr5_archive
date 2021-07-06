@@ -18,8 +18,9 @@ player_selector.create(player_list)//workaround because constructors only for ob
 
 //Create Environment
 //Just randomly placing rewards right now to test with python
-for (i = 0; i < 10; i++) {
-	instance_create_layer(irandom(room_width), irandom(room_height), "Instances", obj_SimpleReward)
+for (i = 0; i < 1; i++) {
+	curr_reward = instance_create_layer(irandom(room_width), irandom(room_height), "Instances", obj_SimpleReward)
+	rewards[i] = curr_reward
 }
 
 
@@ -42,3 +43,8 @@ method(id, function end_fight() {
 start_fight()
 
 server = instance_create_depth(0, 0, 0, obj_Server)
+with server {
+	player_1 = other.player_1
+	player_2 = other.player_2
+	rewards = other.rewards
+}

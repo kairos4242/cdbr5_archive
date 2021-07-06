@@ -28,7 +28,18 @@ switch (nEvent) {
                 var data = buffer_read(buffer,buffer_u16);
                 show_debug_message("Data: "+string(data));
 				buffer_seek(write_buffer, buffer_seek_start, 0)
-				buffer_write(write_buffer, buffer_string, "yerrr\n")
+				with player_1 {
+					if place_meeting(x, y, other.rewards[0]) {
+						with other {
+							buffer_write(write_buffer, buffer_string, string("0,0\n"))
+						}
+					}
+					else {
+						with other {
+							buffer_write(write_buffer, buffer_string, string(sign(rewards[0].x - player_1.x)) + "," + string(sign(player_1.y - rewards[0].y)) + "\n")
+						}
+					}
+				}
 				network_send_packet(socket, write_buffer, buffer_get_size(write_buffer))
             break;
         }
