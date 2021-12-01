@@ -30,20 +30,21 @@ switch (nEvent) {
 				
 				switch data {
 					default: break;
-					case 0: player_1.x += 50
+					case 0: player_1.x += 25
 					break;
-					case 1: player_1.y += 50
+					case 1: player_1.y -= 25
 					break;
-					case 2: player_1.x -= 50
+					case 2: player_1.x -= 25
 					break;
-					case 3: player_1.y -= 50
-					break;
+					case 3: player_1.y += 25
+					break;//set up like this cause 0 is right, 90 up, 180 left, 270 down
 					case 65534:
 					//this the agent's signal for no action, just a request for game state
 					//happens when the agent first starts and needs an initial state
+					break;
 					case 65535:
 					//this is the signal for a reset
-					game_restart()
+					room_restart()
 					break;
 				}
 				
@@ -58,12 +59,12 @@ switch (nEvent) {
 					else {
 						show_debug_message("Sending off distance to reward")
 						with other {
-							var xdir = sign(rewards[0].x - player_1.x)
-							var ydir = sign(player_1.y - rewards[0].y)
+							var xdir = difference_sign_margin(rewards[0].x, player_1.x, player_1.sprite_height / 2)//1 if to the right, -1 if to the left
+							var ydir = difference_sign_margin(player_1.y, rewards[0].y, player_1.sprite_height / 2)//1 if upward, -1 if downward
 							show_debug_message("Xdir: " + string(xdir))
 							show_debug_message("Ydir: " + string(ydir))
 							buffer_write(write_buffer, buffer_string, string(xdir) + "," + string(ydir) + "\n")
-							show_debug_message("Buffer size: " + string(buffer_get_size(write_buffer)))
+							//show_debug_message("Buffer size: " + string(buffer_get_size(write_buffer)))
 						}
 					}
 				}

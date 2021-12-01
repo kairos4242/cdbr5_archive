@@ -66,12 +66,22 @@ MAX_INT_SIZE = 65536
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((TCP_IP, TCP_PORT))
-for i in range(3):
-  time.sleep(5)
-  response = send_and_receive(1)
-  print(f"Response: {response}")
-response = send_reset()
-print(f"Response: {response}")
+state = send_no_action()
+
+for i in range(100):
+  time.sleep(0.2)
+  if state[0] == 1:
+    state = send_and_receive(0)
+  elif state[0] == -1:
+    state = send_and_receive(2)
+  elif state[1] == 1:
+    state = send_and_receive(1)
+  elif state[1] == -1:
+    state = send_and_receive(3)
+  elif state == [0,0]:
+    send_reset()
+    state = send_no_action()
+  print(f"Response: {state}")
 #s.close()
 
 class CDBREnv(py_environment.PyEnvironment):
@@ -105,21 +115,22 @@ class CDBREnv(py_environment.PyEnvironment):
 
     # Make sure episodes don't go on forever.
     if action == 3:
-        #move left
+        #move down
         self._state = send_and_receive(3)
     if action== 2:
-        #move down
+        #move left
         self._state = send_and_receive(2)
     if action == 1:
-      #move right
+      #move up
       self._state = send_and_receive(1)
     elif action == 0:
-      #move up
+      #move right
       self._state = send_and_receive(0)
     else:
       raise ValueError('`action` should be 0, 1, 2 or 3.')
 
     if self._episode_ended or (self._state == [0, 0]):
+      #this reward is wrong, for our sample problem should maybe be 1 if on the thing otherwise 0?
       reward = self._state - 21 if self._state <= 21 else -21
       return ts.termination(np.array([self._state], dtype=np.int32), reward)
     else:

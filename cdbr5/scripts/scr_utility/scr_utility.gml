@@ -27,3 +27,14 @@ function ds_list_pop_refills(list, refill_list, random) {
 	}
 	return ds_list_pop(list)
 }
+
+function difference_sign_margin(x1, x2, margin) {
+	//returns the sign of x1 - x2, but if the difference is within the margin returns 0
+	var diff = x1 - x2
+	if abs(diff) < margin {
+		return 0
+	}
+	else {
+		return sign(diff)
+	}
+}
