@@ -52,7 +52,7 @@ eval_interval = 1000  # @param {type:"integer"}
 env_name = 'CartPole-v1'
 env = suite_gym.load(env_name)
 
-env = CardGameEnv()
+env = CDBREnv()
 utils.validate_py_environment(env, episodes=5)
 
 env.reset()
