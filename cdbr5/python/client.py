@@ -3,8 +3,6 @@ import struct
 import time
 import timeit
 import random
-
-
 import abc
 import tensorflow as tf
 import numpy as np
@@ -30,7 +28,7 @@ class CDBREnv(py_environment.PyEnvironment):
     self._action_spec = array_spec.BoundedArraySpec(
         shape=(), dtype=np.int32, minimum=0, maximum=3, name='action')
     self._observation_spec = array_spec.BoundedArraySpec(
-        shape=(1,4), dtype=np.int32, minimum=0, maximum=1366, name='observation')
+        shape=(1,4), dtype=np.int32, minimum=0, maximum=700, name='observation')#eventually this max should be determined by a request to the game to see how big the room is
     self._episode_ended = False
     self._current_time_step = None
 
@@ -128,12 +126,12 @@ class CDBREnv(py_environment.PyEnvironment):
           np.array([self._state], dtype=np.int32), reward=0.0, discount=1.0)
 
 
-#let's see if just doing this without any qualifiers works?
+""" #let's see if just doing this without any qualifiers works?
 env = CDBREnv()
 utils.validate_py_environment(env, episodes=5)
 
 external_state = env.send_no_action()
-""" for i in range(100):
+for i in range(100):
   time.sleep(0.2)
   if external_state[0] == 1:
     #env.step(0)
@@ -150,5 +148,5 @@ external_state = env.send_no_action()
   elif external_state == [0,0]:
     env._reset()
     external_state = env.send_no_action()
-  print(f"Response: {external_state}") """
-env.close_socket()
+  print(f"Response: {external_state}")
+env.close_socket() """

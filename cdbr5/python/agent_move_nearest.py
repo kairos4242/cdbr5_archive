@@ -23,6 +23,7 @@ from tf_agents.trajectories import trajectory
 from tf_agents.specs import tensor_spec
 from tf_agents.utils import common
 from tf_agents.environments import utils
+from tf_agents.environments import BatchedPyEnvironment
 
 from environment import CardGameEnv
 from client import CDBREnv
@@ -51,10 +52,10 @@ eval_interval = 1000  # @param {type:"integer"}
 #load environment
 env_name = 'CartPole-v1'
 #env = suite_gym.load(env_name)
-
+print("Line 54")
 env = CDBREnv()
-utils.validate_py_environment(env, episodes=5)
-
+#utils.validate_py_environment(env, episodes=5)
+print("Line 57")
 env.reset()
 #PIL.Image.fromarray(env.render()).save("out.png", "PNG")
 #PIL.Image.open("out.png")
@@ -84,13 +85,14 @@ print(time_step)
 #eval_py_env = suite_gym.load(env_name)
 train_py_env = CDBREnv()
 
-
-train_env = tf_py_environment.TFPyEnvironment(train_py_env)
+batched_py_env = BatchedPyEnvironment([train_py_env])
+train_env = tf_py_environment.TFPyEnvironment(batched_py_env)
 
 fc_layer_params = (100, 50)
 action_tensor_spec = tensor_spec.from_spec(env.action_spec())
+print(f"action tensor spec: {action_tensor_spec}")
 num_actions = action_tensor_spec.maximum - action_tensor_spec.minimum + 1
-
+print(f"num actions: {num_actions}")
 # Define a helper function to create Dense layers configured with the right
 # activation and kernel initializer.
 def dense_layer(num_units):
@@ -117,8 +119,8 @@ optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
 train_step_counter = tf.Variable(0)
 
 agent = dqn_agent.DqnAgent(
-    train_env.time_step_spec(),
-    train_env.action_spec(),
+    time_step_spec = train_env.time_step_spec(),
+    action_spec = train_env.action_spec(),
     q_network=q_net,
     optimizer=optimizer,
     td_errors_loss_fn=common.element_wise_squared_loss,
@@ -150,6 +152,9 @@ def compute_avg_return(environment, policy, num_episodes=10):
 
 # See also the metrics module for standard implementations of different metrics.
 # https://github.com/tensorflow/agents/tree/master/tf_agents/metrics
+
+eval_py_env = CDBREnv()
+eval_env = tf_py_environment.TFPyEnvironment(eval_py_env)
 
 random_policy = random_tf_policy.RandomTFPolicy(train_env.time_step_spec(),
                                                 train_env.action_spec())
@@ -199,14 +204,10 @@ agent.train = common.function(agent.train)
 agent.train_step_counter.assign(0)
 
 # Evaluate the agent's policy once before training.
-
-eval_py_env = CDBREnv()
-eval_env = tf_py_environment.TFPyEnvironment(eval_py_env)
 avg_return = compute_avg_return(eval_env, agent.policy, num_eval_episodes)
 returns = [avg_return]
 
 for _ in range(num_iterations):
-
   # Collect a few steps using collect_policy and save to the replay buffer.
   collect_data(train_env, agent.collect_policy, replay_buffer, collect_steps_per_iteration)
 

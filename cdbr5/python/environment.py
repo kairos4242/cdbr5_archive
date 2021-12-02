@@ -27,6 +27,7 @@ class CardGameEnv(py_environment.PyEnvironment):
         shape=(1,), dtype=np.int32, minimum=0, name='observation')
     self._state = 0
     self._episode_ended = False
+    
 
   def action_spec(self):
     return self._action_spec
