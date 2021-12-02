@@ -55,17 +55,17 @@ switch (nEvent) {
 					if place_meeting(x, y, other.rewards[0]) {
 						show_debug_message("Sending off a success")
 						with other {
-							buffer_write(write_buffer, buffer_string, string("0,0\n"))
+							buffer_write(write_buffer, buffer_string, string("0,0,0,0\n"))
 						}
 					}
 					else {
-						show_debug_message("Sending off distance to reward")
+						show_debug_message("Sending off observation spec")
 						with other {
-							var xdir = difference_sign_margin(rewards[0].x, player_1.x, player_1.sprite_height / 2)//1 if to the right, -1 if to the left
-							var ydir = difference_sign_margin(player_1.y, rewards[0].y, player_1.sprite_height / 2)//1 if upward, -1 if downward
-							show_debug_message("Xdir: " + string(xdir))
-							show_debug_message("Ydir: " + string(ydir))
-							buffer_write(write_buffer, buffer_string, string(xdir) + "," + string(ydir) + "\n")
+							//var xdir = difference_sign_margin(rewards[0].x, player_1.x, player_1.sprite_height / 2)//1 if to the right, -1 if to the left
+							//var ydir = difference_sign_margin(player_1.y, rewards[0].y, player_1.sprite_height / 2)//1 if upward, -1 if downward
+							//show_debug_message("Xdir: " + string(xdir))
+							//show_debug_message("Ydir: " + string(ydir))
+							buffer_write(write_buffer, buffer_string, string(player_1.x) + "," + string(player_1.y) + "," + string(rewards[0].x) + "," + string(rewards[0].y) + "\n")
 							//show_debug_message("Buffer size: " + string(buffer_get_size(write_buffer)))
 						}
 					}

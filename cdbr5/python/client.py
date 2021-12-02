@@ -30,7 +30,7 @@ class CDBREnv(py_environment.PyEnvironment):
     self._action_spec = array_spec.BoundedArraySpec(
         shape=(), dtype=np.int32, minimum=0, maximum=3, name='action')
     self._observation_spec = array_spec.BoundedArraySpec(
-        shape=(1,2), dtype=np.int32, minimum=-1, maximum=1, name='observation')
+        shape=(1,4), dtype=np.int32, minimum=0, maximum=1366, name='observation')
     self._episode_ended = False
     self._current_time_step = None
 
@@ -117,7 +117,7 @@ class CDBREnv(py_environment.PyEnvironment):
     else:
       raise ValueError(f'`action` should be 0, 1, 2 or 3. Instead, it is {action}')
 
-    if self._episode_ended or (self._state == [0, 0]):
+    if self._episode_ended or (self._state == [0, 0, 0, 0]):
       #this reward is wrong, maybe we should have a third val on our observation spec for a ticking clock, and rewards decline based on how long it takes before the agent can find them
       #or maybe compare our agents performance to optimal performance and penalize them based on how suboptimal their performance is
       reward = 1#temp, why not
