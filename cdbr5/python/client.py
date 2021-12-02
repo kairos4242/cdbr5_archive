@@ -30,7 +30,7 @@ class CDBREnv(py_environment.PyEnvironment):
     self._action_spec = array_spec.BoundedArraySpec(
         shape=(), dtype=np.int32, minimum=0, maximum=3, name='action')
     self._observation_spec = array_spec.BoundedArraySpec(
-        shape=(2,), dtype=np.int32, minimum=-1, maximum=1, name='observation')
+        shape=(1,2), dtype=np.int32, minimum=-1, maximum=1, name='observation')
     self._episode_ended = False
     self._current_time_step = None
 
@@ -106,17 +106,17 @@ class CDBREnv(py_environment.PyEnvironment):
     if action == 3:
         #move down
         self._state = self.send_and_receive(3)
-    if action== 2:
+    elif action == 2:
         #move left
         self._state = self.send_and_receive(2)
-    if action == 1:
+    elif action == 1:
       #move up
       self._state = self.send_and_receive(1)
     elif action == 0:
       #move right
       self._state = self.send_and_receive(0)
     else:
-      raise ValueError('`action` should be 0, 1, 2 or 3.')
+      raise ValueError(f'`action` should be 0, 1, 2 or 3. Instead, it is {action}')
 
     if self._episode_ended or (self._state == [0, 0]):
       #this reward is wrong, maybe we should have a third val on our observation spec for a ticking clock, and rewards decline based on how long it takes before the agent can find them
@@ -130,25 +130,25 @@ class CDBREnv(py_environment.PyEnvironment):
 
 #let's see if just doing this without any qualifiers works?
 env = CDBREnv()
-#utils.validate_py_environment(env, episodes=5)
+utils.validate_py_environment(env, episodes=5)
 
 external_state = env.send_no_action()
-for i in range(100):
+""" for i in range(100):
   time.sleep(0.2)
   if external_state[0] == 1:
     #env.step(0)
-    external_state = env.send_and_receive(0)
+    external_state = env.step(0).observation.tolist()[0]
   elif external_state[0] == -1:
-    external_state = env.send_and_receive(2)
+    external_state = env.step(2).observation.tolist()[0]
     #env.step(2)
   elif external_state[1] == 1:
-    external_state = env.send_and_receive(1)
+    external_state = env.step(1).observation.tolist()[0]
     #env.step(1)
   elif external_state[1] == -1:
-    external_state = env.send_and_receive(3)
+    external_state = env.step(3).observation.tolist()[0]
     #env.step(3)
   elif external_state == [0,0]:
     env._reset()
     external_state = env.send_no_action()
-  print(f"Response: {external_state}")
+  print(f"Response: {external_state}") """
 env.close_socket()
