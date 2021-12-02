@@ -63,9 +63,9 @@ class CDBREnv(py_environment.PyEnvironment):
     #this was initially 1024, as the size of the buffer game maker is supposedly sending over is 1024
     #however, game maker turned out to actually be sending a larger packet than that, the precise size I'm not sure of
     #it was causing every second request to fail as there was still unread junk in the buffer it was reading instead of the new packet it thought it was reading
-    print('Received raw', repr(data))
-    print('Received', repr(data)[50:])
-    print('Sanitized received: ', self.parse_buffer(repr(data)[50:]))
+    #print('Received raw', repr(data))
+    #print('Received', repr(data)[50:])
+    #print('Sanitized received: ', self.parse_buffer(repr(data)[50:]))
     return self.parse_buffer(repr(data)[50:])
 
   def send_reset(self):
@@ -102,7 +102,6 @@ class CDBREnv(py_environment.PyEnvironment):
       # a new episode.
       return self.reset()
 
-    # Make sure episodes don't go on forever.
     if action == 3:
         #move down
         self._state = self.send_and_receive(3)
@@ -122,6 +121,7 @@ class CDBREnv(py_environment.PyEnvironment):
       #this reward is wrong, maybe we should have a third val on our observation spec for a ticking clock, and rewards decline based on how long it takes before the agent can find them
       #or maybe compare our agents performance to optimal performance and penalize them based on how suboptimal their performance is
       reward = 1#temp, why not
+      self._episode_ended = True
       return ts.termination(np.array([self._state], dtype=np.int32), reward)
     else:
       return ts.transition(

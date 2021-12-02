@@ -50,7 +50,7 @@ eval_interval = 1000  # @param {type:"integer"}
 
 #load environment
 env_name = 'CartPole-v1'
-env = suite_gym.load(env_name)
+#env = suite_gym.load(env_name)
 
 env = CDBREnv()
 utils.validate_py_environment(env, episodes=5)
@@ -82,11 +82,10 @@ print(time_step)
 #create environments
 #train_py_env = suite_gym.load(env_name)
 #eval_py_env = suite_gym.load(env_name)
-train_py_env = CardGameEnv()
-eval_py_env = CardGameEnv()
+train_py_env = CDBREnv()
+
 
 train_env = tf_py_environment.TFPyEnvironment(train_py_env)
-eval_env = tf_py_environment.TFPyEnvironment(eval_py_env)
 
 fc_layer_params = (100, 50)
 action_tensor_spec = tensor_spec.from_spec(env.action_spec())
@@ -200,6 +199,9 @@ agent.train = common.function(agent.train)
 agent.train_step_counter.assign(0)
 
 # Evaluate the agent's policy once before training.
+
+eval_py_env = CDBREnv()
+eval_env = tf_py_environment.TFPyEnvironment(eval_py_env)
 avg_return = compute_avg_return(eval_env, agent.policy, num_eval_episodes)
 returns = [avg_return]
 

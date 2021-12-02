@@ -47,6 +47,8 @@ switch (nEvent) {
 					room_restart()
 					break;
 				}
+				player_1.x = clamp(player_1.x,0, room_width)
+				player_1.y = clamp(player_1.y, 0, room_height)
 				
 				buffer_seek(write_buffer, buffer_seek_start, 0)
 				with player_1 {
